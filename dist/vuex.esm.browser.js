@@ -460,7 +460,6 @@ class Store {
       .forEach(sub => sub(mutation, this.state));
 
     if (
-      
       options && options.silent
     ) {
       console.warn(
@@ -747,7 +746,7 @@ function makeLocalContext (store, namespace, path) {
 
       if (!options || !options.root) {
         type = namespace + type;
-        if ( !store._actions[type]) {
+        if (!store._actions[type]) {
           console.error(`[vuex] unknown local action type: ${args.type}, global type: ${type}`);
           return
         }
@@ -763,7 +762,7 @@ function makeLocalContext (store, namespace, path) {
 
       if (!options || !options.root) {
         type = namespace + type;
-        if ( !store._mutations[type]) {
+        if (!store._mutations[type]) {
           console.error(`[vuex] unknown local mutation type: ${args.type}, global type: ${type}`);
           return
         }
@@ -910,7 +909,7 @@ function install (_Vue) {
  */
 const mapState = normalizeNamespace((namespace, states) => {
   const res = {};
-  if ( !isValidMap(states)) {
+  if (!isValidMap(states)) {
     console.error('[vuex] mapState: mapper parameter must be either an Array or an Object');
   }
   normalizeMap(states).forEach(({ key, val }) => {
@@ -943,7 +942,7 @@ const mapState = normalizeNamespace((namespace, states) => {
  */
 const mapMutations = normalizeNamespace((namespace, mutations) => {
   const res = {};
-  if ( !isValidMap(mutations)) {
+  if (!isValidMap(mutations)) {
     console.error('[vuex] mapMutations: mapper parameter must be either an Array or an Object');
   }
   normalizeMap(mutations).forEach(({ key, val }) => {
@@ -973,7 +972,7 @@ const mapMutations = normalizeNamespace((namespace, mutations) => {
  */
 const mapGetters = normalizeNamespace((namespace, getters) => {
   const res = {};
-  if ( !isValidMap(getters)) {
+  if (!isValidMap(getters)) {
     console.error('[vuex] mapGetters: mapper parameter must be either an Array or an Object');
   }
   normalizeMap(getters).forEach(({ key, val }) => {
@@ -983,7 +982,7 @@ const mapGetters = normalizeNamespace((namespace, getters) => {
       if (namespace && !getModuleByNamespace(this.$store, 'mapGetters', namespace)) {
         return
       }
-      if ( !(val in this.$store.getters)) {
+      if (!(val in this.$store.getters)) {
         console.error(`[vuex] unknown getter: ${val}`);
         return
       }
@@ -1003,7 +1002,7 @@ const mapGetters = normalizeNamespace((namespace, getters) => {
  */
 const mapActions = normalizeNamespace((namespace, actions) => {
   const res = {};
-  if ( !isValidMap(actions)) {
+  if (!isValidMap(actions)) {
     console.error('[vuex] mapActions: mapper parameter must be either an Array or an Object');
   }
   normalizeMap(actions).forEach(({ key, val }) => {
@@ -1042,7 +1041,7 @@ const createNamespacedHelpers = (namespace) => ({
  * normalizeMap([1, 2, 3]) => [ { key: 1, val: 1 }, { key: 2, val: 2 }, { key: 3, val: 3 } ]
  * normalizeMap({a: 1, b: 2, c: 3}) => [ { key: 'a', val: 1 }, { key: 'b', val: 2 }, { key: 'c', val: 3 } ]
  * @param {Array|Object} map
- * @return {Object}
+ * @return {Array}
  */
 function normalizeMap (map) {
   if (!isValidMap(map)) {
@@ -1088,7 +1087,7 @@ function normalizeNamespace (fn) {
  */
 function getModuleByNamespace (store, helper, namespace) {
   const module = store._modulesNamespaceMap[namespace];
-  if ( !module) {
+  if (!module) {
     console.error(`[vuex] module namespace not found in ${helper}(): ${namespace}`);
   }
   return module
@@ -1196,5 +1195,4 @@ var index = {
   createLogger
 };
 
-export default index;
-export { Store, createLogger, createNamespacedHelpers, install, mapActions, mapGetters, mapMutations, mapState };
+export { Store, createLogger, createNamespacedHelpers, index as default, install, mapActions, mapGetters, mapMutations, mapState };

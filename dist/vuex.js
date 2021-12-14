@@ -7,7 +7,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Vuex = factory());
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
   function applyMixin (Vue) {
     var version = Number(Vue.version.split('.')[0]);
@@ -160,9 +160,9 @@
     this.state = (typeof rawState === 'function' ? rawState() : rawState) || {};
   };
 
-  var prototypeAccessors = { namespaced: { configurable: true } };
+  var prototypeAccessors$1 = { namespaced: { configurable: true } };
 
-  prototypeAccessors.namespaced.get = function () {
+  prototypeAccessors$1.namespaced.get = function () {
     return !!this._rawModule.namespaced
   };
 
@@ -217,7 +217,9 @@
     }
   };
 
-  Object.defineProperties( Module.prototype, prototypeAccessors );
+  Object.defineProperties( Module.prototype, prototypeAccessors$1 );
+
+  var Module$1 = Module;
 
   var ModuleCollection = function ModuleCollection (rawRootModule) {
     // register root module (Vuex.Store options)
@@ -243,14 +245,14 @@
   };
 
   ModuleCollection.prototype.register = function register (path, rawModule, runtime) {
-      var this$1 = this;
+      var this$1$1 = this;
       if ( runtime === void 0 ) runtime = true;
 
     {
       assertRawModule(path, rawModule);
     }
 
-    var newModule = new Module(rawModule, runtime);
+    var newModule = new Module$1(rawModule, runtime);
     if (path.length === 0) {
       this.root = newModule;
     } else {
@@ -261,7 +263,7 @@
     // register nested modules
     if (rawModule.modules) {
       forEachValue(rawModule.modules, function (rawChildModule, key) {
-        this$1.register(path.concat(key), rawChildModule, runtime);
+        this$1$1.register(path.concat(key), rawChildModule, runtime);
       });
     }
   };
@@ -298,6 +300,8 @@
 
     return false
   };
+
+  var ModuleCollection$1 = ModuleCollection;
 
   function update (path, targetModule, newModule) {
     {
@@ -372,7 +376,7 @@
   var Vue; // bind on install
 
   var Store = function Store (options) {
-    var this$1 = this;
+    var this$1$1 = this;
     if ( options === void 0 ) options = {};
 
     // Auto install if it is not done yet and `window` has `Vue`.
@@ -397,7 +401,7 @@
     this._actionSubscribers = [];
     this._mutations = Object.create(null);
     this._wrappedGetters = Object.create(null);
-    this._modules = new ModuleCollection(options);
+    this._modules = new ModuleCollection$1(options);
     this._modulesNamespaceMap = Object.create(null);
     this._subscribers = [];
     this._watcherVM = new Vue();
@@ -430,7 +434,7 @@
     resetStoreVM(this, state);
 
     // apply plugins
-    plugins.forEach(function (plugin) { return plugin(this$1); });
+    plugins.forEach(function (plugin) { return plugin(this$1$1); });
 
     var useDevtools = options.devtools !== undefined ? options.devtools : Vue.config.devtools;
     if (useDevtools) {
@@ -438,20 +442,20 @@
     }
   };
 
-  var prototypeAccessors$1 = { state: { configurable: true } };
+  var prototypeAccessors = { state: { configurable: true } };
 
-  prototypeAccessors$1.state.get = function () {
+  prototypeAccessors.state.get = function () {
     return this._vm._data.$$state
   };
 
-  prototypeAccessors$1.state.set = function (v) {
+  prototypeAccessors.state.set = function (v) {
     {
       assert(false, "use store.replaceState() to explicit replace store state.");
     }
   };
 
   Store.prototype.commit = function commit (_type, _payload, _options) {
-      var this$1 = this;
+      var this$1$1 = this;
 
     // check object-style commit
     var ref = unifyObjectStyle(_type, _payload, _options);
@@ -475,10 +479,9 @@
 
     this._subscribers
       .slice() // shallow copy to prevent iterator invalidation if subscriber synchronously calls unsubscribe
-      .forEach(function (sub) { return sub(mutation, this$1.state); });
+      .forEach(function (sub) { return sub(mutation, this$1$1.state); });
 
     if (
-      
       options && options.silent
     ) {
       console.warn(
@@ -489,7 +492,7 @@
   };
 
   Store.prototype.dispatch = function dispatch (_type, _payload) {
-      var this$1 = this;
+      var this$1$1 = this;
 
     // check object-style dispatch
     var ref = unifyObjectStyle(_type, _payload);
@@ -509,7 +512,7 @@
       this._actionSubscribers
         .slice() // shallow copy to prevent iterator invalidation if subscriber synchronously calls unsubscribe
         .filter(function (sub) { return sub.before; })
-        .forEach(function (sub) { return sub.before(action, this$1.state); });
+        .forEach(function (sub) { return sub.before(action, this$1$1.state); });
     } catch (e) {
       {
         console.warn("[vuex] error in before action subscribers: ");
@@ -524,9 +527,9 @@
     return new Promise(function (resolve, reject) {
       result.then(function (res) {
         try {
-          this$1._actionSubscribers
+          this$1$1._actionSubscribers
             .filter(function (sub) { return sub.after; })
-            .forEach(function (sub) { return sub.after(action, this$1.state); });
+            .forEach(function (sub) { return sub.after(action, this$1$1.state); });
         } catch (e) {
           {
             console.warn("[vuex] error in after action subscribers: ");
@@ -536,9 +539,9 @@
         resolve(res);
       }, function (error) {
         try {
-          this$1._actionSubscribers
+          this$1$1._actionSubscribers
             .filter(function (sub) { return sub.error; })
-            .forEach(function (sub) { return sub.error(action, this$1.state, error); });
+            .forEach(function (sub) { return sub.error(action, this$1$1.state, error); });
         } catch (e) {
           {
             console.warn("[vuex] error in error action subscribers: ");
@@ -560,19 +563,19 @@
   };
 
   Store.prototype.watch = function watch (getter, cb, options) {
-      var this$1 = this;
+      var this$1$1 = this;
 
     {
       assert(typeof getter === 'function', "store.watch only accepts a function.");
     }
-    return this._watcherVM.$watch(function () { return getter(this$1.state, this$1.getters); }, cb, options)
+    return this._watcherVM.$watch(function () { return getter(this$1$1.state, this$1$1.getters); }, cb, options)
   };
 
   Store.prototype.replaceState = function replaceState (state) {
-      var this$1 = this;
+      var this$1$1 = this;
 
     this._withCommit(function () {
-      this$1._vm._data.$$state = state;
+      this$1$1._vm._data.$$state = state;
     });
   };
 
@@ -593,7 +596,7 @@
   };
 
   Store.prototype.unregisterModule = function unregisterModule (path) {
-      var this$1 = this;
+      var this$1$1 = this;
 
     if (typeof path === 'string') { path = [path]; }
 
@@ -603,7 +606,7 @@
 
     this._modules.unregister(path);
     this._withCommit(function () {
-      var parentState = getNestedState(this$1.state, path.slice(0, -1));
+      var parentState = getNestedState(this$1$1.state, path.slice(0, -1));
       Vue.delete(parentState, path[path.length - 1]);
     });
     resetStore(this);
@@ -631,7 +634,7 @@
     this._committing = committing;
   };
 
-  Object.defineProperties( Store.prototype, prototypeAccessors$1 );
+  Object.defineProperties( Store.prototype, prototypeAccessors );
 
   function genericSubscribe (fn, subs, options) {
     if (subs.indexOf(fn) < 0) {
@@ -776,7 +779,7 @@
 
         if (!options || !options.root) {
           type = namespace + type;
-          if ( !store._actions[type]) {
+          if (!store._actions[type]) {
             console.error(("[vuex] unknown local action type: " + (args.type) + ", global type: " + type));
             return
           }
@@ -793,7 +796,7 @@
 
         if (!options || !options.root) {
           type = namespace + type;
-          if ( !store._mutations[type]) {
+          if (!store._mutations[type]) {
             console.error(("[vuex] unknown local mutation type: " + (args.type) + ", global type: " + type));
             return
           }
@@ -940,7 +943,7 @@
    */
   var mapState = normalizeNamespace(function (namespace, states) {
     var res = {};
-    if ( !isValidMap(states)) {
+    if (!isValidMap(states)) {
       console.error('[vuex] mapState: mapper parameter must be either an Array or an Object');
     }
     normalizeMap(states).forEach(function (ref) {
@@ -976,7 +979,7 @@
    */
   var mapMutations = normalizeNamespace(function (namespace, mutations) {
     var res = {};
-    if ( !isValidMap(mutations)) {
+    if (!isValidMap(mutations)) {
       console.error('[vuex] mapMutations: mapper parameter must be either an Array or an Object');
     }
     normalizeMap(mutations).forEach(function (ref) {
@@ -1012,7 +1015,7 @@
    */
   var mapGetters = normalizeNamespace(function (namespace, getters) {
     var res = {};
-    if ( !isValidMap(getters)) {
+    if (!isValidMap(getters)) {
       console.error('[vuex] mapGetters: mapper parameter must be either an Array or an Object');
     }
     normalizeMap(getters).forEach(function (ref) {
@@ -1025,7 +1028,7 @@
         if (namespace && !getModuleByNamespace(this.$store, 'mapGetters', namespace)) {
           return
         }
-        if ( !(val in this.$store.getters)) {
+        if (!(val in this.$store.getters)) {
           console.error(("[vuex] unknown getter: " + val));
           return
         }
@@ -1045,7 +1048,7 @@
    */
   var mapActions = normalizeNamespace(function (namespace, actions) {
     var res = {};
-    if ( !isValidMap(actions)) {
+    if (!isValidMap(actions)) {
       console.error('[vuex] mapActions: mapper parameter must be either an Array or an Object');
     }
     normalizeMap(actions).forEach(function (ref) {
@@ -1090,7 +1093,7 @@
    * normalizeMap([1, 2, 3]) => [ { key: 1, val: 1 }, { key: 2, val: 2 }, { key: 3, val: 3 } ]
    * normalizeMap({a: 1, b: 2, c: 3}) => [ { key: 'a', val: 1 }, { key: 'b', val: 2 }, { key: 'c', val: 3 } ]
    * @param {Array|Object} map
-   * @return {Object}
+   * @return {Array}
    */
   function normalizeMap (map) {
     if (!isValidMap(map)) {
@@ -1136,7 +1139,7 @@
    */
   function getModuleByNamespace (store, helper, namespace) {
     var module = store._modulesNamespaceMap[namespace];
-    if ( !module) {
+    if (!module) {
       console.error(("[vuex] module namespace not found in " + helper + "(): " + namespace));
     }
     return module
@@ -1247,4 +1250,4 @@
 
   return index_cjs;
 
-})));
+}));

@@ -154,9 +154,9 @@ var Module = function Module (rawModule, runtime) {
   this.state = (typeof rawState === 'function' ? rawState() : rawState) || {};
 };
 
-var prototypeAccessors = { namespaced: { configurable: true } };
+var prototypeAccessors$1 = { namespaced: { configurable: true } };
 
-prototypeAccessors.namespaced.get = function () {
+prototypeAccessors$1.namespaced.get = function () {
   return !!this._rawModule.namespaced
 };
 
@@ -211,7 +211,9 @@ Module.prototype.forEachMutation = function forEachMutation (fn) {
   }
 };
 
-Object.defineProperties( Module.prototype, prototypeAccessors );
+Object.defineProperties( Module.prototype, prototypeAccessors$1 );
+
+var Module$1 = Module;
 
 var ModuleCollection = function ModuleCollection (rawRootModule) {
   // register root module (Vuex.Store options)
@@ -237,14 +239,14 @@ ModuleCollection.prototype.update = function update$1 (rawRootModule) {
 };
 
 ModuleCollection.prototype.register = function register (path, rawModule, runtime) {
-    var this$1 = this;
+    var this$1$1 = this;
     if ( runtime === void 0 ) runtime = true;
 
   if ((process.env.NODE_ENV !== 'production')) {
     assertRawModule(path, rawModule);
   }
 
-  var newModule = new Module(rawModule, runtime);
+  var newModule = new Module$1(rawModule, runtime);
   if (path.length === 0) {
     this.root = newModule;
   } else {
@@ -255,7 +257,7 @@ ModuleCollection.prototype.register = function register (path, rawModule, runtim
   // register nested modules
   if (rawModule.modules) {
     forEachValue(rawModule.modules, function (rawChildModule, key) {
-      this$1.register(path.concat(key), rawChildModule, runtime);
+      this$1$1.register(path.concat(key), rawChildModule, runtime);
     });
   }
 };
@@ -292,6 +294,8 @@ ModuleCollection.prototype.isRegistered = function isRegistered (path) {
 
   return false
 };
+
+var ModuleCollection$1 = ModuleCollection;
 
 function update (path, targetModule, newModule) {
   if ((process.env.NODE_ENV !== 'production')) {
@@ -366,7 +370,7 @@ function makeAssertionMessage (path, key, type, value, expected) {
 var Vue; // bind on install
 
 var Store = function Store (options) {
-  var this$1 = this;
+  var this$1$1 = this;
   if ( options === void 0 ) options = {};
 
   // Auto install if it is not done yet and `window` has `Vue`.
@@ -391,7 +395,7 @@ var Store = function Store (options) {
   this._actionSubscribers = [];
   this._mutations = Object.create(null);
   this._wrappedGetters = Object.create(null);
-  this._modules = new ModuleCollection(options);
+  this._modules = new ModuleCollection$1(options);
   this._modulesNamespaceMap = Object.create(null);
   this._subscribers = [];
   this._watcherVM = new Vue();
@@ -424,7 +428,7 @@ var Store = function Store (options) {
   resetStoreVM(this, state);
 
   // apply plugins
-  plugins.forEach(function (plugin) { return plugin(this$1); });
+  plugins.forEach(function (plugin) { return plugin(this$1$1); });
 
   var useDevtools = options.devtools !== undefined ? options.devtools : Vue.config.devtools;
   if (useDevtools) {
@@ -432,20 +436,20 @@ var Store = function Store (options) {
   }
 };
 
-var prototypeAccessors$1 = { state: { configurable: true } };
+var prototypeAccessors = { state: { configurable: true } };
 
-prototypeAccessors$1.state.get = function () {
+prototypeAccessors.state.get = function () {
   return this._vm._data.$$state
 };
 
-prototypeAccessors$1.state.set = function (v) {
+prototypeAccessors.state.set = function (v) {
   if ((process.env.NODE_ENV !== 'production')) {
     assert(false, "use store.replaceState() to explicit replace store state.");
   }
 };
 
 Store.prototype.commit = function commit (_type, _payload, _options) {
-    var this$1 = this;
+    var this$1$1 = this;
 
   // check object-style commit
   var ref = unifyObjectStyle(_type, _payload, _options);
@@ -469,7 +473,7 @@ Store.prototype.commit = function commit (_type, _payload, _options) {
 
   this._subscribers
     .slice() // shallow copy to prevent iterator invalidation if subscriber synchronously calls unsubscribe
-    .forEach(function (sub) { return sub(mutation, this$1.state); });
+    .forEach(function (sub) { return sub(mutation, this$1$1.state); });
 
   if (
     (process.env.NODE_ENV !== 'production') &&
@@ -483,7 +487,7 @@ Store.prototype.commit = function commit (_type, _payload, _options) {
 };
 
 Store.prototype.dispatch = function dispatch (_type, _payload) {
-    var this$1 = this;
+    var this$1$1 = this;
 
   // check object-style dispatch
   var ref = unifyObjectStyle(_type, _payload);
@@ -503,7 +507,7 @@ Store.prototype.dispatch = function dispatch (_type, _payload) {
     this._actionSubscribers
       .slice() // shallow copy to prevent iterator invalidation if subscriber synchronously calls unsubscribe
       .filter(function (sub) { return sub.before; })
-      .forEach(function (sub) { return sub.before(action, this$1.state); });
+      .forEach(function (sub) { return sub.before(action, this$1$1.state); });
   } catch (e) {
     if ((process.env.NODE_ENV !== 'production')) {
       console.warn("[vuex] error in before action subscribers: ");
@@ -518,9 +522,9 @@ Store.prototype.dispatch = function dispatch (_type, _payload) {
   return new Promise(function (resolve, reject) {
     result.then(function (res) {
       try {
-        this$1._actionSubscribers
+        this$1$1._actionSubscribers
           .filter(function (sub) { return sub.after; })
-          .forEach(function (sub) { return sub.after(action, this$1.state); });
+          .forEach(function (sub) { return sub.after(action, this$1$1.state); });
       } catch (e) {
         if ((process.env.NODE_ENV !== 'production')) {
           console.warn("[vuex] error in after action subscribers: ");
@@ -530,9 +534,9 @@ Store.prototype.dispatch = function dispatch (_type, _payload) {
       resolve(res);
     }, function (error) {
       try {
-        this$1._actionSubscribers
+        this$1$1._actionSubscribers
           .filter(function (sub) { return sub.error; })
-          .forEach(function (sub) { return sub.error(action, this$1.state, error); });
+          .forEach(function (sub) { return sub.error(action, this$1$1.state, error); });
       } catch (e) {
         if ((process.env.NODE_ENV !== 'production')) {
           console.warn("[vuex] error in error action subscribers: ");
@@ -554,19 +558,19 @@ Store.prototype.subscribeAction = function subscribeAction (fn, options) {
 };
 
 Store.prototype.watch = function watch (getter, cb, options) {
-    var this$1 = this;
+    var this$1$1 = this;
 
   if ((process.env.NODE_ENV !== 'production')) {
     assert(typeof getter === 'function', "store.watch only accepts a function.");
   }
-  return this._watcherVM.$watch(function () { return getter(this$1.state, this$1.getters); }, cb, options)
+  return this._watcherVM.$watch(function () { return getter(this$1$1.state, this$1$1.getters); }, cb, options)
 };
 
 Store.prototype.replaceState = function replaceState (state) {
-    var this$1 = this;
+    var this$1$1 = this;
 
   this._withCommit(function () {
-    this$1._vm._data.$$state = state;
+    this$1$1._vm._data.$$state = state;
   });
 };
 
@@ -587,7 +591,7 @@ Store.prototype.registerModule = function registerModule (path, rawModule, optio
 };
 
 Store.prototype.unregisterModule = function unregisterModule (path) {
-    var this$1 = this;
+    var this$1$1 = this;
 
   if (typeof path === 'string') { path = [path]; }
 
@@ -597,7 +601,7 @@ Store.prototype.unregisterModule = function unregisterModule (path) {
 
   this._modules.unregister(path);
   this._withCommit(function () {
-    var parentState = getNestedState(this$1.state, path.slice(0, -1));
+    var parentState = getNestedState(this$1$1.state, path.slice(0, -1));
     Vue.delete(parentState, path[path.length - 1]);
   });
   resetStore(this);
@@ -625,7 +629,7 @@ Store.prototype._withCommit = function _withCommit (fn) {
   this._committing = committing;
 };
 
-Object.defineProperties( Store.prototype, prototypeAccessors$1 );
+Object.defineProperties( Store.prototype, prototypeAccessors );
 
 function genericSubscribe (fn, subs, options) {
   if (subs.indexOf(fn) < 0) {
@@ -1084,7 +1088,7 @@ var createNamespacedHelpers = function (namespace) { return ({
  * normalizeMap([1, 2, 3]) => [ { key: 1, val: 1 }, { key: 2, val: 2 }, { key: 3, val: 3 } ]
  * normalizeMap({a: 1, b: 2, c: 3}) => [ { key: 'a', val: 1 }, { key: 'b', val: 2 }, { key: 'c', val: 3 } ]
  * @param {Array|Object} map
- * @return {Object}
+ * @return {Array}
  */
 function normalizeMap (map) {
   if (!isValidMap(map)) {
@@ -1239,5 +1243,4 @@ var index = {
   createLogger: createLogger
 };
 
-export default index;
-export { Store, createLogger, createNamespacedHelpers, install, mapActions, mapGetters, mapMutations, mapState };
+export { Store, createLogger, createNamespacedHelpers, index as default, install, mapActions, mapGetters, mapMutations, mapState };
